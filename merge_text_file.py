@@ -123,7 +123,7 @@ class MergeTextFile:
         return text_buffer
     
     @classmethod
-    def tree(cls, path: Path, indent: int = 0):
+    def tree(cls, path: Path, indent: int = 2):
         buffer: list[str] = []
         buffer.append(f"{' ' * max(indent - 2, 0)}- {path.name}")
         if path.is_dir():
