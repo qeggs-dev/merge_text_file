@@ -72,8 +72,16 @@ python run.py
 合并指定路径下的所有文件
 
 ```jinja2
-{% set content = merge_text("./src") %}
+{% set content = merge_text("./src") -%}
 {{ content }}
+```
+
+#### `tree(path)`
+
+生成指定路径下的文件树
+
+```jinja2
+{{ tree("./src") }}
 ```
 
 #### `wrap_file(text, file_path)`
@@ -89,7 +97,7 @@ python run.py
 获取Markdown代码块包装器
 
 ```jinja2
-{% set content = merge_text("./src", wrap_file=get_markdown_code_block_wrap("python")) %}
+{% set content = merge_text("./src", wrap_file=get_markdown_code_block_wrap("python")) -%}
 {{ content }}
 ```
 
@@ -102,8 +110,8 @@ print("Hello World")
 获取自定义模板包装器
 
 ```jinja2
-{% set my_wrap = get_custom_wrap("File: {{ file_path }}\n---\n{{ text }}") %}
-{% set content = merge_text("./docs", wrap_file=my_wrap) %}
+{% set my_wrap = get_custom_wrap("File: {{ file_path }}\n---\n{{ text }}") -%}
+{% set content = merge_text("./docs", wrap_file=my_wrap) -%}
 {{ content }}
 ```
 
@@ -117,14 +125,14 @@ print("Hello World")
 
 ## 源代码
 
-{% set python_wrap = get_markdown_code_block_wrap("python") %}
-{% set source_code = merge_text("./src", file_path_pattern=".*\\.py$", wrap_file=python_wrap) %}
+{% set python_wrap = get_markdown_code_block_wrap("python") -%}
+{% set source_code = merge_text("./src", file_path_pattern=".*\\.py$", wrap_file=python_wrap) -%}
 {{ source_code }}
 
 ## 配置文件
 
-{% set config_wrap = get_custom_wrap("=== {{ file_path }} ===\n{{ text }}\n===") %}
-{% set configs = merge_text(".", file_path_pattern=".*\\.(json|yml)$", wrap_file=config_wrap) %}
+{% set config_wrap = get_custom_wrap("=== {{ file_path }} ===\n{{ text }}\n===") -%}
+{% set configs = merge_text(".", file_path_pattern=".*\\.(json|yml)$", wrap_file=config_wrap) -%}
 {{ configs }}
 ```
 
