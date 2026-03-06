@@ -122,6 +122,18 @@ class MergeTextFile:
             text_buffer.append(cls.parse_file(path, base_path, encoding, file_path_pattern, wrap_file))
         return text_buffer
     
+    @classmethod
+    def tree(cls, path: Path, indent: int = 0):
+        buffer: list[str] = []
+        buffer.append(f"{' ' * max(indent - 2, 0)}- {path.name}")
+        if path.is_dir():
+            for sub_path in path.iterdir():
+                if sub_path.is_file():
+                    buffer.append(f"{' ' * indent}- {sub_path.name}")
+                if sub_path.is_dir():
+                    buffer.extend(cls.tree(sub_path, indent + 2))
+        return buffer
+    
     def load_guidance(self) -> None:
         json_guidance_path = Path("./guidance.json")
         yaml_guidance_path = Path("./guidance.yml")
@@ -147,7 +159,8 @@ class MergeTextFile:
         base_path = Path(file_path).parent
         environment = SandboxedEnvironment()
         template: Template = environment.from_string(index_template)
-        def merge_text(path: Path, encoding: str = self.guidance.encoding, file_path_pattern: str | None = None, wrap_file: Callable[[str, Path], str] | None = None) -> str:
+
+        def merge_text(path: str | os.PathLike, encoding: str = self.guidance.encoding, file_path_pattern: str | None = None, wrap_file: Callable[[str, Path], str] | None = None) -> str:
             path = Path(path)
             compiled_file_path_pattern = None
             if file_path_pattern is not None:
@@ -167,9 +180,26 @@ class MergeTextFile:
                     path = path.as_posix()
                 )
             return text
+        
+        def tree(path: str | os.PathLike):
+            path = Path(path)
+            path = safe_relative_to(path, base_path)
+            text = "\n".join(
+                self.tree(
+                    path = base_path,
+                )
+            )
+            if not text:
+                logger.warning(
+                    "{path} not found anything.",
+                    path = base_path.as_posix()
+                )
+            return text
+
         rendered_template: str = template.render(
             merge_text = merge_text,
             wrap_file = self.wrap_file,
+            tree = tree,
             get_markdown_code_block_wrap = self.get_markdown_code_block_wrap,
             get_custom_wrap = self.get_custom_wrap,
             console_input = input,
