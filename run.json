@@ -1,0 +1,38 @@
+{
+    "title": "Merge Docs",
+    "python_name": {
+        "windows": "python",
+        "linux": "python3",
+        "macos": "python3",
+        "jvm": "python3",
+        "default": "python3"
+    },
+    "pip_name": {
+        "windows": "pip",
+        "linux": "pip3",
+        "macos": "pip3",
+        "jvm": "pip3",
+        "default": "pip3"
+    },
+    "requirements": [
+        "pydantic==2.12.5",
+        "jinja2==3.1.6",
+        "pyyaml==6.0.3",
+        "loguru==0.7.3"
+    ],
+    "requirements_file": "requirements.txt",
+    "use_venv": true,
+    "venv_prompt": "venv",
+    "script_name": null,
+    "argument": null,
+    "restart": true,
+    "reselect": false,
+    "run_cmd_need_to_ask": false,
+    "ask_default_values": {},
+    "divider_line_char": "=",
+    "text_encoding": "utf-8",
+    "print_return_code": true,
+    "print_runtime": true,
+    "automatic_exit": false,
+    "allow_print": true
+}
