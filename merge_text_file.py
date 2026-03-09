@@ -134,17 +134,28 @@ class MergeTextFile:
                     buffer.extend(cls.tree(sub_path, indent + 2))
         return buffer
     
-    def load_guidance(self) -> None:
+    def load_guidance(self, path: str | os.PathLike | None = None) -> None:
         json_guidance_path = Path("./guidance.json")
         yaml_guidance_path = Path("./guidance.yml")
+
+        if path is None:
+            if json_guidance_path.exists():
+                path = json_guidance_path
+            elif yaml_guidance_path.exists():
+                path = yaml_guidance_path
+            else:
+                raise FileNotFoundError("No guidance file found")
+        else:
+            path = Path(path)
         
-        if json_guidance_path.exists():
-            with open(json_guidance_path, "r", encoding="utf-8") as f:
+        
+        if path.suffix == ".json":
+            with open(path, "r", encoding="utf-8") as f:
                 self.guidance = Guidance(
                     **json.load(f)
                 )
-        elif yaml_guidance_path.exists():
-            with open(yaml_guidance_path, "r", encoding="utf-8") as f:
+        elif path.suffix in [".yml", ".yaml"]:
+            with open(path, "r", encoding="utf-8") as f:
                 self.guidance = Guidance(
                     **yaml.safe_load(f)
                 )
@@ -219,7 +230,10 @@ class MergeTextFile:
 
 def main():
     guidance = MergeTextFile()
-    guidance.load_guidance()
+    if len(sys.argv) < 2:
+        guidance.load_guidance()
+    else:
+        guidance.load_guidance(sys.argv[1])
     guidance.main_render()
 
 if __name__ == "__main__":
