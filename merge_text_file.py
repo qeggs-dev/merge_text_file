@@ -48,7 +48,6 @@ class MergeTextFile:
         text_buffer.append("[file content begin]")
         text_buffer.append(text)
         text_buffer.append("[file content end]")
-        text_buffer.append("")
         return "\n".join(text_buffer)
     
     @staticmethod
@@ -112,6 +111,7 @@ class MergeTextFile:
             for sub_path in path.iterdir():
                 if sub_path.is_file():
                     text_buffer.append(cls.parse_file(sub_path, base_path, encoding, file_path_pattern, wrap_file))
+                    text_buffer.append("")
                 if sub_path.is_dir():
                     text_buffer.extend(cls.merge_text(sub_path, base_path, encoding, file_path_pattern, wrap_file))
             
@@ -183,10 +183,9 @@ class MergeTextFile:
         
         def tree(path: str | os.PathLike):
             path = Path(path)
-            path = safe_relative_to(path, base_path)
             text = "\n".join(
                 self.tree(
-                    path = base_path,
+                    path = base_path / path,
                 )
             )
             if not text:
