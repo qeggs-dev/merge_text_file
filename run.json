@@ -24,7 +24,7 @@
     "use_venv": true,
     "venv_prompt": "venv",
     "script_name": null,
-    "argument": null,
+    "arguments": null,
     "restart": true,
     "reselect": false,
     "run_cmd_need_to_ask": false,
